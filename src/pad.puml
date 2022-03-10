@@ -1,0 +1,66 @@
+@startuml "Sistema de Gerenciamento do Plano de Atividade Docente"
+    title "<b>Sistema de Gerenciamento do Plano de Atividade Docente</b>"
+    
+    left to right direction
+
+    (Manter PAD) as mpad
+    (Incluir PAD) as ipad
+    (Alterar PAD) as apad
+    (Excluir PAD) as epad
+    (Listar PAD) as lpad
+    (Pesquisar PAD) as ppad
+
+    (Corrigir PAD) as valipad
+
+    (Submeter PAD) as envpad
+    (Monitorar Revisões PAD) as revpad
+    (Validar PAD) as valipad
+    (Homologar PAD) as homopad
+    (Monitorar Submissões de PAD) as monipad
+    (Monitorar Correções de PAD) as moni_corr_pad
+
+    (Manter Cronograma) as m_cron
+
+    (Visualizar Ações) as acoes
+
+    (Autenticacao) as autent
+    (Manter Usuario) as m_usuario
+
+    actor Professor as p
+    actor "Coordenador Curso" as cc
+    actor "Coordenador Setorial" as cs
+    actor "Comunidade Academica" as ca
+    actor "Gestor" as g
+    actor "Administrador" as adm
+
+
+    p <|-right- cc
+    cc <|-up- cs
+
+    p --> mpad
+    ca --> acoes
+
+    p --> ca
+    g --> cs
+    adm --> g
+
+    mpad <.. ipad : extends
+    mpad <.. apad : extends
+    mpad <.. epad : extends
+    mpad <.. lpad : extends
+    mpad <.. ppad : extends
+
+    p --> envpad
+    p --> moni_corr_pad
+    p -up-> autent
+
+    cc -right-> monipad
+    cs --> revpad
+    cs --> valipad
+
+    g --> homopad
+    g --> m_cron
+
+    adm --> m_usuario
+
+@enduml
