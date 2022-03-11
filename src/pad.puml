@@ -3,64 +3,132 @@
     
     left to right direction
 
-    (Manter PAD) as mpad
-    (Incluir PAD) as ipad
-    (Alterar PAD) as apad
-    (Excluir PAD) as epad
-    (Listar PAD) as lpad
-    (Pesquisar PAD) as ppad
+    'PAD
+    (Manter PAD) as mPad
+    (Incluir PAD) as iPad
+    (Alterar PAD) as aPad
+    (Excluir PAD) as ePad
+    (Listar PAD) as lPad
+    (Pesquisar PAD) as pPad
 
-    (Corrigir PAD) as valipad
+    (Corrigir PAD) as corrigePad
 
-    (Submeter PAD) as envpad
-    (Monitorar Revisões PAD) as revpad
-    (Validar PAD) as valipad
-    (Homologar PAD) as homopad
-    (Monitorar Submissões de PAD) as monipad
-    (Monitorar Correções de PAD) as moni_corr_pad
+    (Submeter PAD) as envPad
+    (Monitorar Revisões PADs) as revPad
+    (Validar PAD) as valiPad
+    (Monitorar Submissões de PADs) as moniPad
+    (Monitorar Correções de PADs) as moniCorrPad
 
-    (Manter Cronograma) as m_cron
+    (Homologar PAD) as homoPad
+    (Monitorar Homologacao de PADs) as moniHomPad
+    (Gerar Relatorio PADs) as gerarRelatorioPad
+    (Consultar PADs) as consultarPad
 
-    (Visualizar Ações) as acoes
+    'Cronograma
+    (Manter Cronograma) as mantCron
+    (Incluir Cronograma) as iCron
+    (Alterar Cronograma) as aCron
+    (Excluir Cronograma) as eCron
+    (Listar Cronograma) as lCron
 
-    (Autenticacao) as autent
-    (Manter Usuario) as m_usuario
+    'Dados abertos
+    (Consultar Informações) as consultInfo
 
-    actor Professor as p
+    'Administração
+    (Autenticar) as autent
+    (Auto Registrar) as registrar
+    (Manter Usuario) as mantUsuario
+    (Incluir Usuário) as iUsuario
+    (Alterar Usuário) as aUsuario
+    (Excluir Usuário) as eUsuario
+    (Listar Usuário) as lUsuario
+    (Pesquisar Usuário) as pUsuario
+    (Bloquear Usuário) as bloqUsuario
+    (Desbloquear Usuário) as desbloqUsuario
+
+    (Manter Gestores) as mantGestores
+    (Manter Coordenadores) as mantCoordenadores
+    (Manter Dados Cadastrais) as mantCadastro
+    (Alternar Perfil) as alternarPerfil
+    (Manter Configuracaoes) as manterConfiguracoes
+
+    'Sistema
+    (Importar Usuarios) as (importUsuarios) <<Batch>>
+    (Importar Cursos) as (importCursos) <<Batch>>
+    (Importar Componentes Curriculares) as (importCompCurr) <<Batch>>
+    
+    'Atores
+    actor Professor as prof
     actor "Coordenador Curso" as cc
     actor "Coordenador Setorial" as cs
     actor "Comunidade Academica" as ca
-    actor "Gestor" as g
+    actor "Gestor" as gest
     actor "Administrador" as adm
+    actor "Sistema" as sistema
 
+    'atores
+    prof <|-right- cc
+    cc <|-right- cs
+    prof -left-|> ca
+    gest -left-|> cs
+    adm --|> gest
 
-    p <|-right- cc
-    cc <|-up- cs
+    'professor
+    prof --> mPad
+    prof --> corrigePad    
 
-    p --> mpad
-    ca --> acoes
+    prof --> envPad
+    prof --> moniCorrPad
+    prof -up-> autent
+    autent .left.> registrar : <<extend>>
+    prof --> mantCadastro
 
-    p --> ca
-    g --> cs
-    adm --> g
+    mPad <.. iPad : <<extend>>
+    mPad <.. aPad : <<extend>>
+    mPad <.. ePad : <<extend>>
+    mPad ..> lPad : <<include>>
+    mPad <.. pPad : <<extend>>
 
-    mpad <.. ipad : extends
-    mpad <.. apad : extends
-    mpad <.. epad : extends
-    mpad <.. lpad : extends
-    mpad <.. ppad : extends
+    'comunidade academica
+    ca --> consultInfo
 
-    p --> envpad
-    p --> moni_corr_pad
-    p -up-> autent
+    'coordenador de curso
+    cc -up-> moniPad
+    cc -up-> consultarPad
+    cc -up-> alternarPerfil
 
-    cc -right-> monipad
-    cs --> revpad
-    cs --> valipad
+    'coordenador setorial
+    cs --> revPad
+    cs --> valiPad
 
-    g --> homopad
-    g --> m_cron
+    'gestor
+    gest --> homoPad
+    gest --> mantCron
+    gest --> gerarRelatorioPad
+    gest --> moniHomPad
+    gest --> mantCoordenadores
 
-    adm --> m_usuario
+    mantCron <.. iCron : <<extend>>
+    mantCron <.. aCron : <<extend>>
+    mantCron <.. eCron : <<extend>>
+    mantCron ..> lCron : <<include>>
+
+    'administrador
+    adm --> mantUsuario
+    adm --> bloqUsuario
+    adm --> desbloqUsuario
+    adm --> mantGestores
+    
+    mantUsuario <.. iUsuario : <<extend>>
+    mantUsuario <.. aUsuario : <<extend>>
+    mantUsuario <.. eUsuario : <<extend>>
+    mantUsuario ..> lUsuario : <<include>>
+    mantUsuario <.. pUsuario : <<extend>>
+
+    'sistema
+    sistema --> importUsuarios
+    sistema --> importCursos
+    sistema --> importCompCurr
+    sistema --> manterConfiguracoes
 
 @enduml
